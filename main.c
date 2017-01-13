@@ -12,7 +12,7 @@
 #define RESET 0x06
 
 unsigned int8 data_in[50];
-int i, j=0, k;
+int i, sample_n=0; //, k;
 int8 result;
 unsigned int16 ch1data;
 unsigned int16 ch2data;
@@ -73,27 +73,27 @@ void main()
          output_low(START);          
          result = spi_xfer(RDATA);
          //data_in[0] = spi_read();
-         for(k = 0; k < 19; k++)
+         for(int byte_n = 0; byte_n < 19; byte_n++)
          {
-            data_in[k] = spi_xfer(0);
+            data_in[byte_n] = spi_xfer(0);
          }         
          output_high(SPI_CS);
                   
-         ch1data = 0;
-         ch2data = 0;
-         ch3data = 0;
-         ch4data = 0;
+         //ch1data = 0;
+         //ch2data = 0;
+         //ch3data = 0;
+         //ch4data = 0;
          ch1data = (data_in[3] << 8) | data_in[4];
          ch2data = (data_in[5] << 8) | data_in[6];
          ch3data = (data_in[7] << 8) | data_in[8];
          ch4data = (data_in[9] << 8) | data_in[10];
          
-         out_data_1[j] = (signed int16)ch1data;
-         out_data_2[j] = (signed int16)ch2data;
-         j++;
+         out_data_1[sample_n] = (signed int16)ch1data;
+         out_data_2[sample_n] = (signed int16)ch2data;
+         sample_n++;
       }
       
-      if(j >= 100)
+      if(sample_n >= 100)
       {
          fprintf(UART_PORT1, "b");  
          for(i=0; i<100; i++)
@@ -101,7 +101,7 @@ void main()
             fprintf(UART_PORT1, "%d,%d,l", (signed int16)out_data_1[i], (signed int16)out_data_2[i]);
          }
          fprintf(UART_PORT1, "e");
-         j = 0;
+         sample_n = 0;
       }
    }
 
