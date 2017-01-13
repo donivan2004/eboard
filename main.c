@@ -35,7 +35,7 @@ void  timer2_isr(void)
 
 void main()
 {
-   setup_timer2(TMR_INTERNAL | TMR_DIV_BY_1, 3684);
+   setup_timer2(TMR_INTERNAL | TMR_DIV_BY_1, 3684); // 1000 Samples per second
    
    output_high(ADC_PDN);
    output_high(SPI_CS);
